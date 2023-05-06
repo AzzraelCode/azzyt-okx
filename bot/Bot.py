@@ -49,21 +49,24 @@ class Bot(Okx):
         if   fast[-1] > slow[-1] and fast[-2] < slow[-2]: r = 1 # crossover быстрая снизу вверх
         elif fast[-1] < slow[-1] and fast[-2] > slow[-2]: r =-1 # crossunder быстрая свверху вниз
 
-        # logger.info(f"{r} = now {fast[-1]:.6f} / {slow[-1]:.6f}, prev {fast[-2]:.6f} / {slow[-2]:.6f}")
+        if r != 0: logger.info(f"{r} = now {fast[-1]:.6f} / {slow[-1]:.6f}, prev {fast[-2]:.6f} / {slow[-2]:.6f}")
         return r
 
     def check(self):
         """
         Проверка сигналов и постановка ордеров
-        todo: В текущей реализации бот не проверяет наличие позиции ;) Предлагаю реализовать всем желающим
+
+        !! ВАЖНО !!
+
         :return:
         """
         try:
             cross = self.is_cross()
-            if cross > 0:
-                r = self.place_order('buy')
-            elif cross < 0:
-                r = self.place_order('sell')
+
+            if cross > 0 and not self.is_position():
+                self.place_order('buy')
+            elif cross < 0 and self.is_position():
+                self.place_order('sell')
 
         except Exception as e:
             logger.error(str(e))

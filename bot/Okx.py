@@ -16,6 +16,9 @@ class Okx:
     def __init__(self):
         logger.info(f"{os.getenv('NAME', 'Anon')} OKX Auth loaded")
 
+        # для определения позиции
+        self.position_id = "AzzraelCodeYT"
+
         # загрузка значения из переменных окружения,
         # чтобы при изменении окружения после запуска бота, бот продолжал нормально работать
         self.symbol = os.getenv('SYMBOL')
@@ -69,13 +72,35 @@ class Okx:
             side=side,
             ordType='market',
             sz=self.qty,
-            tgtCcy='base_ccy'
+            tgtCcy='base_ccy',
+            clOrdId=self.position_id
         )
 
+        order_id = None
         if r.get('code') == '0':
             # ордер успешно отправлен (но не обязательно исполнен)
             order_id = r.get('data', [])[0].get('ordId')
             logger.info(f"{side} {order_id}")
         else: logger.error(r)
 
-        return r
+        return order_id
+
+    def is_position(self):
+        """
+        Ищем открытую позицию по clOrdId
+        За 3 месяца макс !!!!
+        :return:
+        """
+        orders = TradeAPI(**self.params).get_orders_history(
+            instType="SPOT",
+            instId=self.symbol,
+            ordType="market",
+            state="filled"
+        ).get('data', [])
+
+        for o in orders:
+            if o.get('clOrdId') != self.position_id: continue
+            logger.debug(f"Order_id:{o.get('ordId')} {o.get('side')}")
+            return o.get('side') == 'buy'
+
+        return False
