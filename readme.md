@@ -5,6 +5,7 @@
 Торговая стратегия классическая - пересечение SMA (простых скользящих средних).
 Когда быстрая пересекает медленную снизу вверх - покупаем. Когда сверху вниз - продаем.
 
+Подробное описание в ролике [Торговый Бот на Python для OKX API](https://youtu.be/b0bKujYbaqo)   
 Все серии здесь в Плейлисте [Торговый Бот python-okx](https://www.youtube.com/playlist?list=PLWVnIRD69wY6fnQkxIpcB-K7R_AQuA3hT) 
 
 > **ВАЖНО !** Я показываю пример кода для взаимодействия с OKX v5 API, а не инструмент зарабатывания денег. 
@@ -25,7 +26,8 @@
 См ролик https://youtu.be/E4Y7SWBylBQ
 
 ### Установка 
-``git clone ... ``
+``git clone https://github.com/AzzraelCode/azzyt-okx.git``  
+Или скачать https://github.com/AzzraelCode/azzyt-okx/archive/refs/heads/main.zip
 
 ### Установка зависимостей
 
